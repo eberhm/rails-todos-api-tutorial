@@ -9,18 +9,38 @@ RSpec.describe 'Todos API', type: :request do
   let(:headers) { valid_headers }
 
   # Test suite for GET /todos
-  describe 'GET /todos' do
-    # make HTTP get request before each example
-    before { get '/todos', params: {}, headers: headers }
+  context 'when there\'s no versioning' do
+    describe 'GET /todos' do
+      # make HTTP get request before each example
+      before { get '/todos', params: {}, headers: headers }
 
-    it 'returns todos' do
-      # Note `json` is a custom helper to parse JSON responses
-      expect(json).not_to be_empty
-      expect(json.size).to eq(10)
+      it 'returns todos' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json.size).to eq(10)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
+  end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+  # Test suite for GET /todos
+  context 'when there\'s v2' do
+    describe 'GET /todos' do
+      # make HTTP get request before each example
+      before { get '/todos', params: {}, headers: headers.merge({Accept:'application/vnd.todos.v2+json'}) }
+
+      it 'returns todos' do
+        # Note `json` is a custom helper to parse JSON responses
+        expect(json).not_to be_empty
+        expect(json['message']).to eq('Hello there')
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
