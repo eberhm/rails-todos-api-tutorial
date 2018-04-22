@@ -1,6 +1,4 @@
 class ItemsController < ApplicationController
-    include Response
-    include ExceptionHandler
 
     def index
         json_response(get_todo.items)

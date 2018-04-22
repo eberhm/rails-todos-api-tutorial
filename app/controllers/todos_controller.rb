@@ -1,9 +1,7 @@
 class TodosController < ApplicationController
-    include Response
-    include ExceptionHandler
 
     def index
-        json_response(Todo.all)
+        json_response(current_user.todos)
     end
 
     def show
@@ -11,7 +9,7 @@ class TodosController < ApplicationController
     end
 
     def create
-        json_response(Todo.create!(todo_params), :created)
+        json_response(current_user.todos.create!(todo_params), :created)
     end
 
     def update
@@ -26,6 +24,6 @@ class TodosController < ApplicationController
 
     private
     def todo_params
-        params.permit(:title, :created_by)
+        params.permit(:title)
     end
 end
