@@ -54,6 +54,10 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.before(:each) do
+    MessageQueueFactory.default_connection = BunnyMock.new.start
+  end
 end
 
 # require database cleaner at the top level
